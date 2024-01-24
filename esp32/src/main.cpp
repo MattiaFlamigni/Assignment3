@@ -1,18 +1,20 @@
 #include <Arduino.h>
+#include "components/Sonar.h";
+#include "config.h"
 
-// put function declarations here:
-int myFunction(int, int);
 
+Sonar* sonar;
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+
+  pinMode(RED_LED_PIN, OUTPUT);
+  Serial.begin(9600);
+  sonar = new Sonar(ECHO_PIN, TRIG_PIN, SONAR_TIME);
+  sonar->setTemperature(18);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
+  digitalWrite(RED_LED_PIN, HIGH);
+  Serial.println(sonar->getDistance());
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}
