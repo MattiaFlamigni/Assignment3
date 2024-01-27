@@ -1,5 +1,14 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.configuration.updateBuildConfiguration": "automatic",
     "FSharp.suggestGitignore": false,
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "c:\\Users\\flami\\Desktop\\Assignment3\\RiverMonitoringService\\lib\\jssc-2.9.4.jar"
+        ],
+        "exclude": [
+            "app/lib/jssc-2.9.4.jar"
+        ]
+    }
 }

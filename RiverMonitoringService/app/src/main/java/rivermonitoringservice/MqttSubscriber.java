@@ -35,6 +35,21 @@ public class MqttSubscriber {
             client.setCallback(new MqttCallback() {
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     System.out.println("Messaggio ricevuto: " + new String(message.getPayload()));
+                    //qui inserire il codice per inviare il messaggio tramite la seriale
+
+                    try {
+                        SerialCommChannel serialCommChannel = new SerialCommChannel("COM4", 9600);
+                        serialCommChannel.sendMsg(new String(message.getPayload()));
+                        /*chiudi la porta seriale */
+                        serialCommChannel.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    
+
+                    
+
+
                 }
 
                 public void connectionLost(Throwable cause) {

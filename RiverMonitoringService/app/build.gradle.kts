@@ -14,6 +14,10 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
+    flatDir {
+        dirs("lib")
+    }
 }
 
 dependencies {
@@ -24,6 +28,10 @@ dependencies {
     implementation("com.google.guava:guava:31.1-jre")
 
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    
+    implementation(files("lib/jssc-2.9.4.jar")) // dipendenza jssc
+
+    implementation ("ch.qos.logback:logback-classic:1.2.3") // dipendenza logback
 }
 
 application {
