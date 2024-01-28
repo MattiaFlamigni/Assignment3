@@ -5,53 +5,80 @@
 #include "components/ButtonImpl.h"
 #include "Tasks/SystemModeTask.h"
 
-
 SystemModeTask::SystemModeTask(){
+    this->state = AUTOMATIC; 
+    
+
+    pinMode(3, HIGH);
     this->servo = new ServoMotorImpl(SERVO_PIN);
-    this->lcd = new MyLCD(0x27,8 , 2);
+    this->lcd = new MyLCD(0x27, 8, 2);
     this->button = new ButtonImpl(BUTTON_PIN);
     //this->potentiometer = new Potentiometer(POT_PIN);
+    
     servo->on();
     servo->setPosition(0);
     lcd->initialize();
     lcd->clearDisplay();
     lcd->printMessage("0, Automatic");
-
-    /*legge la porta seriale*/
-    /*if (Serial.available() > 0) {
-        Serial.println("Hello world");
-        int incomingByte = Serial.read();
-        Serial.print("I received: ");
-        Serial.println(incomingByte, DEC);
-        if (incomingByte == 49) {
-            servoMotor->on();
-        } else if (incomingByte == 48) {
-            servoMotor->off();
-        }
-    }*/
 }
 
 void SystemModeTask::tick() {
     switch(state) {
         case AUTOMATIC:
-            do{
-                openingLevel = 0;//TODO inserire get per l'opening level dato dal river monitoring service
-                servo->setPosition(openingLevel); 
-                lcd->printMessage(openingLevel + ", Automatic");
-            } while(!button->isPressed());
-            this->setState(MANUAL);
-        break;
+            Serial.println("Automatic");
+            lcd->clearDisplay();
+            // Converti l'intero in una stringa
+            itoa(openingLevel, buffer, 10); // 10 indica la base decimale
+            lcd->printMessage(buffer);
+            lcd->printMessage(", Automatic");
+            
+            if (debouncedButtonPress()) {
+                this->setState(MANUAL);
+            }
+            break;
 
         case MANUAL:
-            do{
-                //openingLevel = potentiometer->getValue();
-                servo->setPosition(openingLevel); 
-                lcd->printMessage(openingLevel + ", Manual");
-            } while(!button->isPressed());
-            this->setState(AUTOMATIC);         
+            Serial.println("Manual");
+            
+            lcd->clearDisplay();
+            itoa(openingLevel, buffer, 10); // 10 indica la base decimale
+            lcd->printMessage(buffer);
+            lcd->printMessage(", Manual");
+            
+            if (debouncedButtonPress()) {
+                this->setState(AUTOMATIC);
+            }
+            break;
     }
 }
 
-void SystemModeTask::setState(int state) {
-    state = state;
+bool SystemModeTask::debouncedButtonPress() {
+    static unsigned long lastDebounceTime = 0;
+    static const unsigned long debounceDelay = 50; // Tempo di debounce in millisecondi
+    static int lastButtonState = LOW;
+
+    unsigned long currentMillis = millis();
+    
+    if (currentMillis - lastDebounceTime > debounceDelay) {
+        // Leggi lo stato del pulsante
+        int buttonState = button->isPressed();
+        
+        // Se lo stato del pulsante è cambiato
+        if (buttonState != lastButtonState) {
+            lastDebounceTime = currentMillis;
+            
+            // Se il nuovo stato del pulsante è HIGH (premuto)
+            if (buttonState == HIGH) {
+                lastButtonState = buttonState;
+                return true; // Rilevato un pressione stabile
+            }
+        }
+    }
+    
+    lastButtonState = button->isPressed();
+    return false; // Nessuna pressione stabile rilevata
+}
+
+void SystemModeTask::setState(int newState) {
+    state = newState;
 }
