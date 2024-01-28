@@ -1,6 +1,4 @@
 #include <Arduino.h>
-
-
 #include "components/servo_motor.h"
 #include "components/servo_motor_impl.h"
 #include "config.h"
