@@ -114,6 +114,8 @@ public class MqttSubscriber {
             }
         }
 
+
+        System.out.println("Stato: " + state);  
         return valveOpeningLevel;
     }
 }
