@@ -100,20 +100,21 @@ In this state the frequency is still F2, but the valve opening level must be 50%
 water-level > WL4 → ALARM-TOO-HIGH-CRITIC state
 In this state, the frequency is still F2, but the valve opening level should be 100%
  */
+        int valveOpeningLevel = 0; // Valore predefinito
 
-        if(waterLevel >= WL1 && waterLevel <= WL2){
-            return 25;
-        }else if(waterLevel < WL1){
-            return 0;
-        }else if(waterLevel > WL2){
-            if(WL3 < waterLevel && waterLevel <= WL4){
-                return 50;
-            }else if(waterLevel > WL4){
 
-                return 100;
-            }
+        if (waterLevel >= WL1 && waterLevel <= WL2) {
+            valveOpeningLevel = 25;
+        } else if (waterLevel < WL1) {
+            valveOpeningLevel = 0;
+        } else if (waterLevel > WL2 && waterLevel <= WL3) {
+            valveOpeningLevel = 25;
+        } else if (waterLevel > WL3 && waterLevel <= WL4) {
+            valveOpeningLevel = 50;
+        } else if (waterLevel > WL4) {
+            valveOpeningLevel = 100;
         }
 
-        return 0;
+        return valveOpeningLevel;
     }
 }
