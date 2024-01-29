@@ -53,6 +53,9 @@ void SystemModeTask::tick() {
         case MANUAL:
             Serial.println("Manual");
             openingLevel = potentiometer->getValue();
+
+        
+
             lcd->clearDisplay();
             itoa(openingLevel, buffer, 10); // 10 indica la base decimale
             lcd->printMessage(buffer);
