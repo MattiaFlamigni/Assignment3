@@ -10,6 +10,20 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class MqttSubscriber {
     //private SerialCommChannel serialCommChannel;
 
+
+    /* il valore letto ha lo stato too-low, normal, too-high */
+    private enum WaterLevelState {
+        TOO_LOW, NORMAL, PREE_TOO_HIGH, TOO_HIGH, TOO_HIGH_CRITICAL
+    } 
+
+    private static WaterLevelState state; 
+
+
+    
+
+
+
+
     private static final double WL1 = 2;
     private static final double WL2 = 4;
     private static final double WL3 = 6;
@@ -73,19 +87,29 @@ public class MqttSubscriber {
         String valveOpeningLevel = "0";
 
         if(WL1<=waterLevel && waterLevel<WL2){
+            /*state normal */
+           state = WaterLevelState.NORMAL;
+
+
             valveOpeningLevel = "25";
         }else if(waterLevel<WL1){
+            state = WaterLevelState.TOO_LOW;
             valveOpeningLevel = "0";
+
         }else{
             if(WL2<=waterLevel && waterLevel<=WL3){
-                ;
+                state = WaterLevelState.PREE_TOO_HIGH;
+                valveOpeningLevel = "25";
             }
 
             if(WL3<waterLevel && waterLevel<=WL4){
+
+                state = WaterLevelState.TOO_HIGH;
                 valveOpeningLevel = "50";
             }
 
             if(WL4<waterLevel){
+                state = WaterLevelState.TOO_HIGH_CRITICAL;
                 valveOpeningLevel = "100";
             }
         }
