@@ -43,8 +43,10 @@ void SystemModeTask::tick() {
 
             lcd->clearDisplay();
             lcd->printMessage(openingLevel);
-            
             lcd->printMessage(", Automatic");
+            
+            servo->setPosition(openingLevel);
+    
             
             if (debouncedButtonPress()) {
                 this->setState(MANUAL);
@@ -58,9 +60,10 @@ void SystemModeTask::tick() {
         
 
             lcd->clearDisplay();
-            dtostrf(openingLevel, 3, 2, buffer);
-            lcd->printMessage(buffer);
+            lcd->printMessage(openingLevel);
             lcd->printMessage(", Manual");
+
+            servo->setPosition(openingLevel);
             
             if (debouncedButtonPress()) {
                 this->setState(AUTOMATIC);

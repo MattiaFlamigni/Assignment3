@@ -24,6 +24,7 @@ class SystemModeTask: public Task{
         char buffer[16]; 
         unsigned long F = 1000;
         unsigned long lastSerialMsgTime = 0;   
+        void updateLCD();
 };
 
 #endif
