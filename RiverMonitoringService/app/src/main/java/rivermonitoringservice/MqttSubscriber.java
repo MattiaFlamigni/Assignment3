@@ -22,6 +22,13 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MqttSubscriber {
+
+    private static final double WL1 = 0.2;
+    private static final double WL2 = 0.4;
+    private static final double WL3 = 0.6;
+    private static final double WL4 = 0.8;
+
+
     public static void main(String[] args) {
         String broker = "tcp://broker.mqtt-dashboard.com:1883"; // Indirizzo del tuo broker MQTT
         String clientId = "JavaSubscriber";
@@ -35,11 +42,18 @@ public class MqttSubscriber {
             client.setCallback(new MqttCallback() {
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     System.out.println("Messaggio ricevuto: " + new String(message.getPayload()));
+
+                    int waterLevel = Integer.parseInt(new String(message.getPayload()));
+
+
+                    int valveOpen = decideValveOpen(waterLevel);
+
+
                     //qui inserire il codice per inviare il messaggio tramite la seriale
 
                     try {
                         SerialCommChannel serialCommChannel = new SerialCommChannel("COM4", 9600);
-                        serialCommChannel.sendMsg(new String(message.getPayload()));
+                        serialCommChannel.sendMsg(Integer.toString(valveOpen));
                         /*chiudi la porta seriale */
                         serialCommChannel.close();
                     } catch (Exception e) {
@@ -65,5 +79,41 @@ public class MqttSubscriber {
         } catch (MqttException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+
+    private static int decideValveOpen(int waterLevel){   //DA CONTROLLARE
+
+
+        /*When the water level is in the range [WL1, WL2], then the system is considered in a NORMAL state. In the NORMAL state:
+the frequency to be used for monitoring the water level is F1
+the valve opening level should be 25%
+When the water level is < WL1, the system is in an ALARM-TOO-LOW state. 
+In this state, the valve opening level should be 0%
+When the water level is > WL2,  there are three further cases
+WL2 < water-level <= WL3 → the system is in a PRE-ALARM-TOO-HIGH state. 
+In this state, the frequency to be used for monitoring the water level should be increased to F2 (where F2 > F1)
+WL3 < water-level <= WL4 → ALARM-TOO-HIGH state 
+In this state the frequency is still F2, but the valve opening level must be 50%
+water-level > WL4 → ALARM-TOO-HIGH-CRITIC state
+In this state, the frequency is still F2, but the valve opening level should be 100%
+ */
+
+        if(waterLevel >= WL1 && waterLevel <= WL2){
+            return 25;
+        }else if(waterLevel < WL1){
+            return 0;
+        }else if(waterLevel > WL2){
+            if(WL3 < waterLevel && waterLevel <= WL4){
+                return 50;
+            }else if(waterLevel > WL4){
+
+                return 100;
+            }
+        }
+
+        return 0;
     }
 }
