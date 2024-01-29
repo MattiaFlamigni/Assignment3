@@ -21,7 +21,7 @@ SystemModeTask::SystemModeTask(){
     lcd->clearDisplay();
     lcd->printMessage("0, Automatic");
 
-    openingLevel = 0;  //SOLO PER DEBUG, VA LETTO DALLA SERIALE (VEDI SOTTO)
+    //openingLevel = 0;  //SOLO PER DEBUG, VA LETTO DALLA SERIALE (VEDI SOTTO)
     
 }
 
@@ -30,6 +30,12 @@ void SystemModeTask::tick() {
         case AUTOMATIC:
 
             /**leggere dalla seriale l'apertura della valvola*/
+            if (Serial.available() > 0) {
+                openingLevel = Serial.read();
+                Serial.print("openingLevel: ");
+                Serial.println(openingLevel);
+            }
+            
 
 
             Serial.println("Automatic");
@@ -46,7 +52,7 @@ void SystemModeTask::tick() {
 
         case MANUAL:
             Serial.println("Manual");
-            
+            openingLevel = potentiometer->getValue();
             lcd->clearDisplay();
             itoa(openingLevel, buffer, 10); // 10 indica la base decimale
             lcd->printMessage(buffer);

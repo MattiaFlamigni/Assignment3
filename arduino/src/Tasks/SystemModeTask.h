@@ -21,7 +21,9 @@ class SystemModeTask: public Task{
         Potentiometer* potentiometer;
         int openingLevel;
         bool debouncedButtonPress();
-        char buffer[16];    
+        char buffer[16]; 
+        unsigned long F = 1000;
+        unsigned long lastSerialMsgTime = 0;   
 };
 
 #endif
