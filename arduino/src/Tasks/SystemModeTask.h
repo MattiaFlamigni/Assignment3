@@ -19,7 +19,7 @@ class SystemModeTask: public Task{
         MyLCD* lcd;
         Button* button;
         Potentiometer* potentiometer;
-        int openingLevel;
+        double openingLevel;
         bool debouncedButtonPress();
         char buffer[16]; 
         unsigned long F = 1000;

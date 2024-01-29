@@ -10,6 +10,7 @@ public:
   MyLCD(int address, int columns, int rows);
   void initialize();
   void printMessage(const char *message);
+  void printMessage(double message);
   void clearDisplay();
 
 private:
