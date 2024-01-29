@@ -39,8 +39,7 @@ public class MqttSubscriber {
                     int waterLevel = Integer.parseInt(new String(message.getPayload()));
 
                     try {
-                        // calcolo lo stato del livello dell'acqua e lo invio al controller della
-                        // valvola
+                        // calcolo lo stato del livello dell'acqua e lo invio al controller della valvola
                         waterLevelSensor.updateWaterLevel(waterLevel);
                         String valveOpen = valveController.adjustValve(waterLevelSensor.getState());
                         channel.sendMsg(valveOpen);
