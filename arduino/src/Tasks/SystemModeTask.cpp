@@ -20,11 +20,18 @@ SystemModeTask::SystemModeTask(){
     lcd->initialize();
     lcd->clearDisplay();
     lcd->printMessage("0, Automatic");
+
+    openingLevel = 0;  //SOLO PER DEBUG, VA LETTO DALLA SERIALE (VEDI SOTTO)
+    
 }
 
 void SystemModeTask::tick() {
     switch(state) {
         case AUTOMATIC:
+
+            /**leggere dalla seriale l'apertura della valvola*/
+
+
             Serial.println("Automatic");
             lcd->clearDisplay();
             // Converti l'intero in una stringa
