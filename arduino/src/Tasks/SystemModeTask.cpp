@@ -32,6 +32,7 @@ void SystemModeTask::tick() {
             /**leggere dalla seriale l'apertura della valvola*/
             if (MsgService.isMsgAvailable()) {
                 Msg* msg = MsgService.receiveMsg();    
+                oldOpeningLevel = openingLevel;
                 openingLevel = msg->getContent().toDouble();    
                 /* NOT TO FORGET: message deallocation */
                 delete msg;

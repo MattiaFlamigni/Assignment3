@@ -20,6 +20,7 @@ class SystemModeTask: public Task{
         Button* button;
         Potentiometer* potentiometer;
         double openingLevel;
+        double oldOpeningLevel;
         bool debouncedButtonPress();
         char buffer[16]; 
         unsigned long F = 1000;
