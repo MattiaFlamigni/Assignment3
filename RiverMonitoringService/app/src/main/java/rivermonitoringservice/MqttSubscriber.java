@@ -10,10 +10,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class MqttSubscriber {
     //private SerialCommChannel serialCommChannel;
 
-    private static final double WL1 = 0.2;
-    private static final double WL2 = 0.4;
-    private static final double WL3 = 0.6;
-    private static final double WL4 = 0.8;
+    private static final double WL1 = 2;
+    private static final double WL2 = 4;
+    private static final double WL3 = 6;
+    private static final double WL4 = 8;
 
     public static void main(String[] args) throws Exception {
         //MqttSubscriber subscriber = new MqttSubscriber();
@@ -70,19 +70,25 @@ public class MqttSubscriber {
     
 
     private static String decideValveOpen(int waterLevel) { //da rifare con struttura if corretta
-        String valveOpeningLevel = "5";
+        String valveOpeningLevel = "0";
 
-        /*if (waterLevel >= WL1 && waterLevel <= WL2) {
+        if(WL1<=waterLevel && waterLevel<WL2){
             valveOpeningLevel = "25";
-        } else if (waterLevel < WL1) {
+        }else if(waterLevel<WL1){
             valveOpeningLevel = "0";
-        } else if (waterLevel > WL2 && waterLevel <= WL3) {
-            valveOpeningLevel = "25";
-        } else if (waterLevel > WL3 && waterLevel <= WL4) {
-            valveOpeningLevel = "50";
-        } else if (waterLevel > WL4) {
-            valveOpeningLevel = "200";
-        }*/
+        }else{
+            if(WL2<=waterLevel && waterLevel<=WL3){
+                ;
+            }
+
+            if(WL3<waterLevel && waterLevel<=WL4){
+                valveOpeningLevel = "50";
+            }
+
+            if(WL4<waterLevel){
+                valveOpeningLevel = "100";
+            }
+        }
 
         return valveOpeningLevel;
     }
