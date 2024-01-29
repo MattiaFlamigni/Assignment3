@@ -13,7 +13,7 @@ SystemModeTask::SystemModeTask(){
     this->servo = new ServoMotorImpl(SERVO_PIN);
     this->lcd = new MyLCD(0x27, 8, 2);
     this->button = new ButtonImpl(BUTTON_PIN);
-    //this->potentiometer = new Potentiometer(POT_PIN);
+    this->potentiometer = new Potentiometer(POT_PIN);
     
     servo->on();
     servo->setPosition(0);

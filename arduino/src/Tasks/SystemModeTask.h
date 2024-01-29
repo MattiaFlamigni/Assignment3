@@ -5,7 +5,7 @@
 #include "components/MyLCD.h"
 #include "components/Button.h"
 #include "Scheduler/Task.h"
-//#include "components/Potentiometer.h"
+#include "components/Potentiometer.h"
 
 class SystemModeTask: public Task{
     public:
@@ -18,7 +18,7 @@ class SystemModeTask: public Task{
         ServoMotor* servo;
         MyLCD* lcd;
         Button* button;
-        //Potentiometer* potentiometer;
+        Potentiometer* potentiometer;
         int openingLevel;
         bool debouncedButtonPress();
         char buffer[16];    
