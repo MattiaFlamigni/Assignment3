@@ -52,10 +52,10 @@ public class MqttSubscriber {
                     String valveOpen = decideValveOpen(waterLevel);
 
                     try {
-                        
+                        /* invia ad arduino il grado di apertura delle valvole */
                         channel.sendMsg(valveOpen);
     
-
+                        /*debug */
                         System.out.println("Messaggio inviato: " + valveOpen);
 
                         Thread.sleep(500);
