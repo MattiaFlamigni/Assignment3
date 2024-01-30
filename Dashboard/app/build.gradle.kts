@@ -22,6 +22,11 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
+
+    implementation("javax.servlet:javax.servlet-api:4.0.1")
+
+    implementation("org.jfree:jfreechart:1.5.3")
+    implementation("org.jfree:jcommon:1.0.23")
 }
 
 application {
