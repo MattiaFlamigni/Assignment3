@@ -15,7 +15,9 @@ public class Dashboard extends JFrame {
         dataset.addValue(4.0, "Serie1", "Categoria2");
         dataset.addValue(3.0, "Serie1", "Categoria3");
 
-        JFreeChart chart = ChartFactory.createBarChart("Titolo Grafico", "Asse X", "Asse Y", dataset);
+        //JFreeChart chart = ChartFactory.createBarChart("Titolo Grafico", "Asse X", "Asse Y", dataset);
+        JFreeChart chart = ChartFactory.createLineChart("Titolo Grafico", "Asse X", "Asse Y", dataset);
+        
         ChartPanel chartPanel = new ChartPanel(chart);
         add(chartPanel);
         
