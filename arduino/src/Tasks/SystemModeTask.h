@@ -19,11 +19,13 @@ class SystemModeTask: public Task{
         MyLCD* lcd;
         Button* button;
         Potentiometer* potentiometer;
-        int openingLevel;
+        double openingLevel;
+        double oldOpeningLevel;
         bool debouncedButtonPress();
         char buffer[16]; 
         unsigned long F = 1000;
         unsigned long lastSerialMsgTime = 0;   
+        void updateLCD();
 };
 
 #endif

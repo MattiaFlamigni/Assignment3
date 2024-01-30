@@ -16,6 +16,10 @@ void MyLCD::printMessage(const char *message) {
   lcd.print(message);
 }
 
+void MyLCD::printMessage(double message) {
+  lcd.print(message);
+}
+
 void MyLCD::clearDisplay() {
   lcd.clear();
 }

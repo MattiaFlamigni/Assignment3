@@ -4,11 +4,12 @@
 #include "components/MyLCD.h"
 #include "components/ButtonImpl.h"
 #include "Tasks/SystemModeTask.h"
+#include "MsgService.h"
 
 SystemModeTask::SystemModeTask(){
     this->state = AUTOMATIC; 
     
-
+    MsgService.init();
     pinMode(3, HIGH);
     this->servo = new ServoMotorImpl(SERVO_PIN);
     this->lcd = new MyLCD(0x27, 8, 2);
@@ -19,31 +20,34 @@ SystemModeTask::SystemModeTask(){
     servo->setPosition(0);
     lcd->initialize();
     lcd->clearDisplay();
-    lcd->printMessage("0, Automatic");
 
-    //openingLevel = 0;  //SOLO PER DEBUG, VA LETTO DALLA SERIALE (VEDI SOTTO)
+    openingLevel = 0;  //SOLO PER DEBUG, VA LETTO DALLA SERIALE (VEDI SOTTO)
     
 }
 
 void SystemModeTask::tick() {
     switch(state) {
         case AUTOMATIC:
-
+            
             /**leggere dalla seriale l'apertura della valvola*/
-            if (Serial.available() > 0) {
-                openingLevel = Serial.read();
-                Serial.print("openingLevel: ");
-                Serial.println(openingLevel);
+            if (MsgService.isMsgAvailable()) {
+                Msg* msg = MsgService.receiveMsg();    
+                oldOpeningLevel = openingLevel;
+                openingLevel = msg->getContent().toDouble();    
+                /* NOT TO FORGET: message deallocation */
+                delete msg;
             }
             
 
+        
 
-            Serial.println("Automatic");
+
             lcd->clearDisplay();
-            // Converti l'intero in una stringa
-            itoa(openingLevel, buffer, 10); // 10 indica la base decimale
-            lcd->printMessage(buffer);
+            lcd->printMessage(openingLevel);
             lcd->printMessage(", Automatic");
+            
+            servo->setPosition(openingLevel);
+    
             
             if (debouncedButtonPress()) {
                 this->setState(MANUAL);
@@ -54,9 +58,10 @@ void SystemModeTask::tick() {
             Serial.println("Manual");
             openingLevel = potentiometer->getValue();
             lcd->clearDisplay();
-            itoa(openingLevel, buffer, 10); // 10 indica la base decimale
-            lcd->printMessage(buffer);
+            lcd->printMessage(openingLevel);
             lcd->printMessage(", Manual");
+
+            servo->setPosition(openingLevel);
             
             if (debouncedButtonPress()) {
                 this->setState(AUTOMATIC);
