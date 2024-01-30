@@ -4,13 +4,14 @@
 MQTT_Client::MQTT_Client(const char* ssid, const char* password, const char* mqtt_server, const char* topic)
     : client(espClient), ssid(ssid), password(password), mqtt_server(mqtt_server), topic(topic) {
         
-        this->sonar = new Sonar(TRIG_PIN, ECHO_PIN, SONAR_TIME);
+        
 
 
    
 }
 
 void MQTT_Client::setup() {
+    this->sonar = new Sonar(ECHO_PIN, TRIG_PIN, SONAR_TIME);
     Serial.begin(115200);
     setup_wifi();
     randomSeed(micros());
@@ -41,6 +42,7 @@ void MQTT_Client::loop() {
 
     // Reading the distance from the sensor
     int distance = sonar->getDistance();
+    Serial.println(String("Distance: ") + distance);
 
     // Creating a message in the buffer
     snprintf(msg, sizeof(msg), "%d", distance);
