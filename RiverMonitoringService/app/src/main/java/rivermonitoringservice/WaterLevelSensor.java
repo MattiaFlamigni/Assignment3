@@ -16,7 +16,7 @@ public class WaterLevelSensor implements WaterLevelSensorApi{
 
 
     public WaterLevelSensor(){
-        mqttPubblisher = new MqttPubblisher("tcp://broker.mqtt-dashboard.com:1883", "JavaPublisher", "ValveOpeningLevel");
+        mqttPubblisher = new MqttPubblisher("tcp://broker.mqtt-dashboard.com:1883", "JavaPublisher", "Frequency");
     }
 
     public void updateWaterLevel(int waterLevel) throws Exception{
