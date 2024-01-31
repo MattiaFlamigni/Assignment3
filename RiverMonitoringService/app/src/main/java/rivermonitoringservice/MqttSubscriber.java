@@ -10,23 +10,20 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import rivermonitoringservice.api.ValveControllerApi;
 import rivermonitoringservice.api.WaterLevelSensorApi;
 
-
-
 public class MqttSubscriber {
     // private SerialCommChannel serialCommChannel;
 
     private static ValveControllerApi valveController = new ValveController();
     private static WaterLevelSensorApi waterLevelSensor = new WaterLevelSensor();
 
-    public static void main(String[] args) throws Exception {
-        // MqttSubscriber subscriber = new MqttSubscriber();
-
+    public void start() throws Exception{
         String broker = "tcp://broker.mqtt-dashboard.com:1883";
         String clientId = "JavaSubscriber";
         String topic = "WaterLevel";
-        CommChannel channel = new SerialCommChannel("COM4", 9600);
+        
 
         try {
+            CommChannel channel = new SerialCommChannel("COM8", 9600);
             MqttClient client = new MqttClient(broker, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
             options.setCleanSession(true);
@@ -68,5 +65,4 @@ public class MqttSubscriber {
             e.printStackTrace();
         }
     }
-
 }
