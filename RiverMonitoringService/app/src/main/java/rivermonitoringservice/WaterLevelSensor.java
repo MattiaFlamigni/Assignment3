@@ -9,33 +9,46 @@ public class WaterLevelSensor implements WaterLevelSensorApi{
     private static final double WL2 = 4;
     private static final double WL3 = 6;
     private static final double WL4 = 8;
+    private static final int F1 = 500;
+    private static final int F2 = 1000;
 
-    public void updateWaterLevel(int waterLevel){
+    private static MqttPubblisher mqttPubblisher;
+
+
+    public WaterLevelSensor(){
+        mqttPubblisher = new MqttPubblisher("tcp://broker.mqtt-dashboard.com:1883", "JavaPublisher", "ValveOpeningLevel");
+    }
+
+    public void updateWaterLevel(int waterLevel) throws Exception{
         String valveOpeningLevel = "0";
 
         if(WL1<=waterLevel && waterLevel<WL2){
             /*state normal */
-           state = WaterLevelState.NORMAL;
+            state = WaterLevelState.NORMAL;
             valveOpeningLevel = "25";
+            mqttPubblisher.sendMsg(Integer.toString(F1));
         }else if(waterLevel<WL1){
             state = WaterLevelState.TOO_LOW;
             valveOpeningLevel = "0";
-
+            mqttPubblisher.sendMsg(Integer.toString(F1));
         }else{
             if(WL2<=waterLevel && waterLevel<=WL3){
                 state = WaterLevelState.PREE_TOO_HIGH;
                 valveOpeningLevel = "25";
+                mqttPubblisher.sendMsg(Integer.toString(F2));
             }
 
             if(WL3<waterLevel && waterLevel<=WL4){
 
                 state = WaterLevelState.TOO_HIGH;
+                mqttPubblisher.sendMsg(Integer.toString(F2));
                 valveOpeningLevel = "50";
             }
 
             if(WL4<waterLevel){
                 state = WaterLevelState.TOO_HIGH_CRITICAL;
                 valveOpeningLevel = "100";
+                mqttPubblisher.sendMsg(Integer.toString(F2));
             }
         }
     }
