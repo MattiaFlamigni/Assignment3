@@ -16,10 +16,18 @@ public class MqttSubscriber {
     private static ValveControllerApi valveController = new ValveController();
     private static WaterLevelSensorApi waterLevelSensor = new WaterLevelSensor();
 
+    private String broker;
+    private String clientId;
+    private String topic;
+
+    public MqttSubscriber(String broker, String clientId, String topic){
+        this.broker = broker;
+        this.clientId = clientId;
+        this.topic = topic;
+    }
+
     public void start() throws Exception{
-        String broker = "tcp://broker.mqtt-dashboard.com:1883";
-        String clientId = "JavaSubscriber";
-        String topic = "WaterLevel";
+        
         
 
         try {
