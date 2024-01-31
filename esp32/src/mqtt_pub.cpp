@@ -1,17 +1,12 @@
-#include "mqtt_client.h"
+#include "mqtt_pub.h"
 #include "config.h"
 
-MQTT_Client::MQTT_Client(const char* ssid, const char* password, const char* mqtt_server, const char* topic)
+MQTT_Pub::MQTT_Pub(const char* ssid, const char* password, const char* mqtt_server, const char* topic)
     : client(espClient), ssid(ssid), password(password), mqtt_server(mqtt_server), topic(topic) {
-        
-        
-
-
    
 }
 
-void MQTT_Client::setup() {
-    this->sonar = new Sonar(ECHO_PIN, TRIG_PIN, SONAR_TIME);
+void MQTT_Pub::setup() {
     Serial.begin(115200);
     setup_wifi();
     randomSeed(micros());
@@ -19,7 +14,7 @@ void MQTT_Client::setup() {
     client.setCallback([this](char* topic, byte* payload, unsigned int length) { this->callback(topic, payload, length); });
 }
 
-void MQTT_Client::loop() {
+void MQTT_Pub::loop() {
     if (!client.connected()) {
         reconnect();
     }
@@ -39,48 +34,9 @@ void MQTT_Client::loop() {
         client.publish(topic, msg);
     }*/
 
-
-   
-
-
-    // Reading the distance from the sensor with frequency F
-
-    //legge la variabile frequenza e a ogni frequenza legge la distanza
-
-
-    unsigned long now = millis();
-    if (now - lastMsgTime > frequenza) {
-        lastMsgTime = now;
-
-
-        int distance = sonar->getDistance();
-    Serial.println(String("Distance: ") + distance);
-
-    // Creating a message in the buffer
-    snprintf(msg, sizeof(msg), "%d", distance);
-
-    Serial.println(String("Publishing message: ") + msg);
-
-    // Publishing the message
-    client.publish(topic, msg);
-        
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
+
+
 
 
 
@@ -89,7 +45,7 @@ void MQTT_Client::loop() {
     
 }
 
-void MQTT_Client::setup_wifi() {
+void MQTT_Pub::setup_wifi() {
     delay(10);
     Serial.println(String("Connecting to ") + ssid);
     WiFi.mode(WIFI_STA);
@@ -104,11 +60,21 @@ void MQTT_Client::setup_wifi() {
     Serial.println(WiFi.localIP());
 }
 
-void MQTT_Client::callback(char* topic, byte* payload, unsigned int length) {
+void MQTT_Pub::callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(String("Message arrived on [") + topic + "] len: " + length);
+
+    String message;
+    for (int i = 0; i < length; i++) {
+        message += (char)payload[i];
+    }
+    
+    /*converte messa in numero e assegna a frequenza*/
+    frequenza = message.toInt();
+    Serial.println(frequenza);
+
 }
 
-void MQTT_Client::reconnect() {
+void MQTT_Pub::reconnect() {
     // Loop until we're reconnected
     while (!client.connected()) {
         Serial.print("Attempting MQTT connection...");

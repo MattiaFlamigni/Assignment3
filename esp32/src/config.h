@@ -8,5 +8,8 @@
 #define TRIG_PIN 5
 #define SONAR_TIME 5000 //TODO
 
+/*varaibile condivisa tra i due file che contiene la frequenza di invio dei dati*/
+extern int frequenza;
+
 
 #endif

@@ -31,7 +31,7 @@ public class MqttSubscriber {
         
 
         try {
-            CommChannel channel = new SerialCommChannel("COM8", 9600);
+            CommChannel channel = new SerialCommChannel("COM4", 9600);
             MqttClient client = new MqttClient(broker, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
             options.setCleanSession(true);

@@ -9,14 +9,14 @@ public class WaterLevelSensor implements WaterLevelSensorApi{
     private static final double WL2 = 4;
     private static final double WL3 = 6;
     private static final double WL4 = 8;
-    private static final int F1 = 500;
-    private static final int F2 = 1000;
+    private static final int F1 = 2000;
+    private static final int F2 = 6000;
 
     private static MqttPubblisher mqttPubblisher;
 
 
     public WaterLevelSensor(){
-        mqttPubblisher = new MqttPubblisher("tcp://broker.mqtt-dashboard.com:1883", "JavaPublisher", "Frequency");
+        mqttPubblisher = new MqttPubblisher("tcp://broker.mqtt-dashboard.com:1883", "JavaPublisher", "frequency");
     }
 
     public void updateWaterLevel(int waterLevel) throws Exception{
