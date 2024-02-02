@@ -11,8 +11,8 @@ public class WaterLevelSensor implements WaterLevelSensorApi{
     private static final double WL4 = 8;
     private static final int F1 = 2000;
     private static final int F2 = 6000;
-
     private static MqttPubblisher mqttPubblisher;
+    private static String valveOpeningLevel = "5";
 
 
     public WaterLevelSensor(){
@@ -20,7 +20,6 @@ public class WaterLevelSensor implements WaterLevelSensorApi{
     }
 
     public void updateWaterLevel(int waterLevel) throws Exception{
-        String valveOpeningLevel = "0";
 
         if(WL1<=waterLevel && waterLevel<WL2){
             /*state normal */
@@ -56,6 +55,10 @@ public class WaterLevelSensor implements WaterLevelSensorApi{
 
     public WaterLevelState getState() {
         return state;
+    }
+
+    public static String getLevel() {
+        return valveOpeningLevel;
     }
 
     
