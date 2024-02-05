@@ -13,7 +13,7 @@ class SystemModeTask: public Task{
         void tick();
 
     private:
-        enum {AUTOMATIC, MANUAL} state;
+        enum {AUTOMATIC, MANUAL, REMOTE} state;
         void setState(int state);
         ServoMotor* servo;
         MyLCD* lcd;
