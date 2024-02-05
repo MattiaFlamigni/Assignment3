@@ -27,6 +27,10 @@ dependencies {
 
     implementation("org.jfree:jfreechart:1.5.3")
     implementation("org.jfree:jcommon:1.0.23")
+    implementation("com.google.code.gson:gson:2.8.8")
+    implementation("org.apache.commons:commons-csv:1.8")
+    /*http client */
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
 }
 
 application {
