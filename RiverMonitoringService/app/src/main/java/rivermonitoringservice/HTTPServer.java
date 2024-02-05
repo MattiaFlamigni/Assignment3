@@ -12,7 +12,7 @@ public class HTTPServer {
         @Override
         public void handle(HttpExchange t) throws IOException {
             // Gestisci la richiesta qui
-            String response = WaterLevelSensor.getLevel();
+            String response = WaterLevelSensor.getWaterLevel();
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());

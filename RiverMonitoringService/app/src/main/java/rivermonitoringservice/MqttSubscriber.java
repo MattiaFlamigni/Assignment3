@@ -44,6 +44,7 @@ public class MqttSubscriber {
                     int waterLevel = Integer.parseInt(new String(message.getPayload()));
 
                     //waterLevel deve essere inviato alla dashboard per essere visualizzato nel grafico: todo
+                    
 
                     try {
                         // calcolo lo stato del livello dell'acqua e lo invio al controller della valvola
