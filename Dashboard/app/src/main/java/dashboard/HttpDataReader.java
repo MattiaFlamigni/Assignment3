@@ -1,59 +1,58 @@
 package dashboard;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HttpDataReader {
-    public static void readData() throws Exception {
-        String url = "http://localhost:8001/status";
+    public static void main(String[] args) {
+        try {
+            String response = getResponse();
+            Gson gson = new Gson();
+            try {
+                DataReceived dataReceived = gson.fromJson(response, DataReceived.class);
+                System.out.println("ValveOpen: " + dataReceived.getValveOpen());
+                System.out.println("WaterLevelState: " + dataReceived.getWaterLevel());
+            } catch (JsonSyntaxException e) {
+                System.out.println("Errore durante il parsing del JSON: " + e.getMessage());
+                System.out.println("JSON non valido: " + response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-        conn.setRequestMethod("GET");
+    public static String getResponse() throws Exception {
+        URL url = new URL("http://localhost:8001/status");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
 
-        int responseCode = conn.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            // Leggi il contenuto ricevuto dalla richiesta HTTP
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
             StringBuilder response = new StringBuilder();
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
-            in.close();
-
-            // Deserializza il JSON ricevuto in un oggetto DataReceived
-            Gson gson = new Gson();
-            DataReceived dataReceived = gson.fromJson(response.toString(), DataReceived.class);
-
-            // Puoi ora utilizzare l'oggetto dataReceived per accedere ai dati ricevuti
-            System.out.println("Dati ricevuti: " + dataReceived);
-        } else {
-            System.out.println("Errore durante la lettura dei dati tramite HTTP. Codice di risposta: " + responseCode);
+            return response.toString();
+        } finally {
+            con.disconnect();
         }
     }
 
-
     public static class DataReceived {
-        private static WaterLevelState waterLevel;
-        private static int valveOpen;
+        private static String valveOpen;
+        private static WaterLevelState waterLevelState;
 
-        public static WaterLevelState getWaterLevel() {
-            return waterLevel;
-        }
-
-        public static int getValveOpen() {
+        public static String getValveOpen() {
             return valveOpen;
         }
 
-        @Override
-        public String toString() {
-            return "DataReceived{" +
-                    "waterLevel=" + waterLevel +
-                    ", valveOpen=" + valveOpen +
-                    '}';
+        public static WaterLevelState getWaterLevel() {
+            return waterLevelState;
         }
     }
 }
