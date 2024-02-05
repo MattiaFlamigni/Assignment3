@@ -32,6 +32,13 @@ dependencies {
     implementation(files("lib/jssc-2.9.4.jar")) // dipendenza jssc
 
     implementation ("ch.qos.logback:logback-classic:1.2.3") // dipendenza logback
+
+    /*per utilizzare  Http client */
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
+
+    /*per utilizzare  Gson */
+    implementation("com.google.code.gson:gson:2.8.8")
+
 }
 
 application {
