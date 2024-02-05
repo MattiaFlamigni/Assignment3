@@ -36,6 +36,9 @@ void SystemModeTask::tick() {
                 openingLevel = msg->getContent().toDouble();    
                 /* NOT TO FORGET: message deallocation */
                 delete msg;
+
+                lcd->clearDisplay();
+                lcd->printMessage("messaggio disponibile: ");
             }
             
 
@@ -56,7 +59,10 @@ void SystemModeTask::tick() {
 
         case MANUAL:
             Serial.println("Manual");
-            openingLevel = potentiometer->getValue();
+            openingLevel = potentiometer->getValue()/10;
+
+            /*considero solo la prima cifra del numero */
+            
             lcd->clearDisplay();
             lcd->printMessage(openingLevel);
             lcd->printMessage(", Manual");
