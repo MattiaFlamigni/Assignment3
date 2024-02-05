@@ -30,6 +30,8 @@ public class Dashboard extends JFrame {
                     dataset.removeValue("Water Level", category);
                 }
                 try {
+
+
                     dataset.addValue(Integer.parseInt(HTPPClient.getResponse()), "Water Level", time + "");
                 } catch (Exception e1) {
                     // TODO Auto-generated catch block
