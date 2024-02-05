@@ -31,7 +31,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass.set("dashboard.Dashboard")
+    mainClass.set("dashboard.Main")
 }
 
 tasks.named<Test>("test") {

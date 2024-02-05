@@ -8,12 +8,14 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import java.awt.event.*;
+import java.net.http.HttpClient;
 
 public class Dashboard extends JFrame {
 
     int time;
 
-    public Dashboard() {
+    public Dashboard() throws Exception {
+        new HTPPClient();
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         dataset.addValue(1.0, "Water Level", time + "");
         JFreeChart chart = ChartFactory.createLineChart("Livello acqua", "Tempo (secondi)", "Altezza", dataset);     
@@ -21,13 +23,18 @@ public class Dashboard extends JFrame {
         add(chartPanel);
 
         ActionListener taskPerformer = new ActionListener() { // Aggiorna ogni 5 secondi
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e){
 
                 if(dataset.getColumnCount() >= 10) {
                     Comparable<?> category = dataset.getColumnKey(0);
                     dataset.removeValue("Water Level", category);
                 }
-                dataset.addValue(time*0.23, "Water Level", time + "");
+                try {
+                    dataset.addValue(Integer.parseInt(HTPPClient.getResponse()), "Water Level", time + "");
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 chart.fireChartChanged();
                 time++;
             }
@@ -40,12 +47,5 @@ public class Dashboard extends JFrame {
         setSize(1000, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Dashboard example = new Dashboard();
-            example.setVisible(true);
-        });
     }
 }
