@@ -31,6 +31,8 @@ public class HttpDataSender {
         int responseCode = conn.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             System.out.println("Dati inviati con successo tramite HTTP.");
+            System.out.println("ValveOpen: " + valveOpen);
+            System.out.println("WaterLevelState: " + waterLevelState);
         } else {
             System.out.println("Errore durante l'invio dei dati tramite HTTP. Codice di risposta: " + responseCode);
         }
@@ -40,6 +42,7 @@ public class HttpDataSender {
     static class DataToSend {
         private String valveOpen;
         private WaterLevelState waterLevelState;
+
 
         public DataToSend(String valveOpen, WaterLevelState waterLevelState) {
             this.valveOpen = valveOpen;
