@@ -21,22 +21,55 @@ public class App {
         HttpServer server;
         HttpServer server1;
         HttpServer server2;
+        HttpServer server3;
+
+
+
         try {
             server = HttpServer.create(new InetSocketAddress(8000), 0);
             server1 = HttpServer.create(new InetSocketAddress(8001), 0);
             server2 = HttpServer.create(new InetSocketAddress(8002), 0);
+            
+
             server.createContext("/endpoint", new MyHandler());
             server1.createContext("/valvola", new HTTPValvola.MyHandler());
             server2.createContext("/stato", new HTTPStato.MyHandler());
+            
             
             server.setExecutor(null); // creates a default executor
             server.start();
             server1.start();
             server2.start();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Errore nella creazione del server");
         }
+
+
+        /*se in remote mi arriva un messaggio tramite http lo manda sulla seriale */
+
+        while (true) {
+            try {
+                String response = Remote.getResponse();
+                System.out.println(response);
+                if (response.equals("ON")) {
+                    //serialCommChannel.sendMsg("ON");
+                } else if (response.equals("OFF")) {
+                    //serialCommChannel.sendMsg("OFF");
+                }
+            } catch (Exception e) {
+                System.out.println("Errore nella comunicazione con il server remoto");
+            }
+        }
+
+
+       
+        
+
+        
+
+
+
+        
         
     }
 }
