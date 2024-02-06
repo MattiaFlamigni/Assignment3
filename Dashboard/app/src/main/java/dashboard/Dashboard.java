@@ -15,7 +15,7 @@ import java.awt.event.*;
 import java.net.http.HttpClient;
 
 public class Dashboard extends JFrame {
-
+    
     int time;
     JLabel statusLabel;
     JLabel valveLabel;
@@ -82,6 +82,10 @@ public class Dashboard extends JFrame {
                     String inputPercentage = textField.getText();
                     // Invia il dato tramite HTTP
                     // HttpClient.sendData(inputPercentage);
+
+                    MyHandler handler = new MyHandler();
+                    handler.inviaDato(inputPercentage);
+                    //System.out.println(inputPercentage);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
