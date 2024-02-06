@@ -67,6 +67,10 @@ public class WaterLevelSensor implements WaterLevelSensorApi{
         return Integer.toString(rawWaterLevel);
     }
 
+    public static String getWaterLevelState(){
+        return state.toString();
+    }
+
     
 
 }
