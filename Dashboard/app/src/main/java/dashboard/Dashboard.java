@@ -2,13 +2,13 @@ package dashboard;
 
 import javax.swing.*;
 
-import org.apache.http.HttpStatus;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import dashboard.HttpDataReader.DataReceived;
+
 
 import java.awt.*;
 import java.awt.event.*;
@@ -62,8 +62,8 @@ public class Dashboard extends JFrame {
                     dataset.addValue(Integer.parseInt(response), "Water Level", time + "");
                     
                     // Aggiorna lo stato e il grado di apertura delle valvole
-                    statusLabel.setText("Stato: " + DataReceived.getWaterLevel());
-                    valveLabel.setText("Grado di apertura: " + DataReceived.getValveOpen());
+                    //statusLabel.setText("Stato: " + DataReceived.getWaterLevel());
+                    valveLabel.setText("Grado di apertura: " + HTPPClientValvola.getResponse());
                 } catch (Exception e1) {
                     statusLabel.setText("Stato: Errore");
                     e1.printStackTrace();
