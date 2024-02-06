@@ -8,17 +8,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HTPPClientValvola {
+public class HTPPClientStato {
     static HttpURLConnection con;
 
-    public HTPPClientValvola() throws Exception {
-        URL url = new URL("http://localhost:8001/valvola");
+    public HTPPClientStato() throws Exception {
+        URL url = new URL("http://localhost:8002/stato");
         con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
     }
 
     public static String getResponse() throws Exception {
-        URL url = new URL("http://localhost:8001/valvola");
+        URL url = new URL("http://localhost:8002/stato");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
 

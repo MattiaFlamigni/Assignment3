@@ -62,7 +62,7 @@ public class Dashboard extends JFrame {
                     dataset.addValue(Integer.parseInt(response), "Water Level", time + "");
                     
                     // Aggiorna lo stato e il grado di apertura delle valvole
-                    //statusLabel.setText("Stato: " + DataReceived.getWaterLevel());
+                    statusLabel.setText("Stato: " + HTPPClientStato.getResponse());
                     valveLabel.setText("Grado di apertura: " + HTPPClientValvola.getResponse());
                 } catch (Exception e1) {
                     statusLabel.setText("Stato: Errore");
