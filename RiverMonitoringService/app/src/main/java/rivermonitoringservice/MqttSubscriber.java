@@ -51,7 +51,7 @@ public class MqttSubscriber {
                         waterLevelSensor.updateWaterLevel(waterLevel);
                         String valveOpen = valveController.adjustValve(waterLevelSensor.getState());
                         channel.sendMsg(valveOpen);
-                        HttpDataSender.sendData(valveOpen, waterLevelSensor.getState());
+                       
 
                         Thread.sleep(500);
                     } catch (Exception e) {

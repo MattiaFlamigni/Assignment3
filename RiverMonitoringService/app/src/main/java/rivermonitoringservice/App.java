@@ -24,7 +24,7 @@ public class App {
             server = HttpServer.create(new InetSocketAddress(8000), 0);
             server1 = HttpServer.create(new InetSocketAddress(8001), 0);
             server.createContext("/endpoint", new MyHandler());
-            server1.createContext("/status", new MyHandler());
+            server1.createContext("/status", new HTTPValvola.MyHandler());
             server.setExecutor(null); // creates a default executor
             server.start();
             server1.start();
