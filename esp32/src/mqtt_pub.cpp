@@ -15,6 +15,7 @@ void MQTT_Pub::setup() {
 }
 
 void MQTT_Pub::loop() {
+
     if (!client.connected()) {
         reconnect();
     }

@@ -3,6 +3,7 @@
 
 #include "mqtt_client.h"
 #include "config.h"
+#include "components/Led.h"
 
 class WaterLevelClient : public MQTT_Client {
 public:
@@ -31,6 +32,7 @@ public:
 
 private:
     Sonar* sonar;
+    Led * led;
 };
 
 #endif

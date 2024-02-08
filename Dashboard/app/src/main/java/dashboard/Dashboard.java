@@ -7,9 +7,11 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
-
-
-
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.http.HttpClient;
@@ -17,7 +19,7 @@ import java.net.http.HttpClient;
 public class Dashboard extends JFrame {
     
     int time;
-    JLabel statusLabel;
+    static JLabel statusLabel;
     JLabel valveLabel;
 
     public Dashboard() throws Exception {
@@ -79,13 +81,49 @@ public class Dashboard extends JFrame {
         sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String inputPercentage = textField.getText();
-                    // Invia il dato tramite HTTP
-                    // HttpClient.sendData(inputPercentage);
+                    // Ottieni il testo dalla label
+                    String labelText = textField.getText();
+        
+                    // Crea la stringa da inviare come parte della richiesta
+                    String requestContent = "Contenuto della label: " + labelText;
+        
+                    // Invia la richiesta al server remoto
+                    URL url = new URL("http://localhost:7000/remote");
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("POST"); // Usa POST o il metodo appropriato per la tua implementazione
+                    con.setDoOutput(true);
+                    try (OutputStream os = con.getOutputStream()) {
+                        byte[] input = requestContent.getBytes("utf-8");
+                        os.write(input, 0, input.length);
+                    }
+        
+                    // Leggi la risposta del server (se necessario)
+                    try (BufferedReader br = new BufferedReader(
+                            new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine = null;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        System.out.println("Risposta dal server: " + response.toString());
+                    }
+        
+                    // Chiudi la connessione
+                    con.disconnect();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
-                    MyHandler handler = new MyHandler();
-                    handler.inviaDato(inputPercentage);
-                    //System.out.println(inputPercentage);
+
+
+
+
+                try {
+                    URL url = new URL("http://localhost:8000/update-data"); // Esempio di endpoint su applicazione 1
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("GET");
+                    int responseCode = con.getResponseCode();
+                    // Gestisci la risposta del server se necessario
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -105,5 +143,15 @@ public class Dashboard extends JFrame {
         setSize(1000, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+
+
+    /*OTTIENE IL VALORE DELLA LABEL */
+
+    public static String getLabelValue() {
+        String labelText = statusLabel.getText();
+        System.out.println("Valore della label: " + labelText);
+        return labelText;
     }
 }

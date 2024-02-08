@@ -4,6 +4,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "components/Sonar.h"
+#include "components/Led.h"
 
 class MQTT_Client {
 private:
@@ -27,6 +28,8 @@ private:
     void callback(char* topic, byte* payload, unsigned int length);
     void reconnect();
     Sonar* sonar;
+    Led* greenLed;
+    Led * redLed;
 };
 
 #endif

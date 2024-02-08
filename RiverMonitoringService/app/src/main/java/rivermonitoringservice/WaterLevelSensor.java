@@ -5,12 +5,12 @@ import rivermonitoringservice.api.WaterLevelSensorApi;
 
 public class WaterLevelSensor implements WaterLevelSensorApi{
     private static WaterLevelState state;
-    private static final double WL1 = 2;
-    private static final double WL2 = 4;
-    private static final double WL3 = 6;
-    private static final double WL4 = 8;
-    private static final int F1 = 2000;
-    private static final int F2 = 6000;
+    private static final double WL1 = 4;
+    private static final double WL2 = 6;
+    private static final double WL3 = 8;
+    private static final double WL4 = 10;
+    private static final int F1 = 3000;
+    private static final int F2 = 1000;
     private static MqttPubblisher mqttPubblisher;
     private static String valveOpeningLevel = "5";
     private static int rawWaterLevel;

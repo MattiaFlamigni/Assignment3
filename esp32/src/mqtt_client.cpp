@@ -1,5 +1,7 @@
 #include "mqtt_client.h"
 #include "config.h"
+#include "components/Led.h"
+
 
 MQTT_Client::MQTT_Client(const char* ssid, const char* password, const char* mqtt_server, const char* topic)
     : client(espClient), ssid(ssid), password(password), mqtt_server(mqtt_server), topic(topic) {
@@ -11,6 +13,16 @@ MQTT_Client::MQTT_Client(const char* ssid, const char* password, const char* mqt
 }
 
 void MQTT_Client::setup() {
+
+
+    greenLed = new Led(GREEN_LED_PIN);
+    redLed = new Led(RED_LED_PIN);
+    
+
+    redLed->switchOn();
+    redLed->switchOff();
+    
+    
     this->sonar = new Sonar(ECHO_PIN, TRIG_PIN, SONAR_TIME);
     Serial.begin(115200);
     setup_wifi();
@@ -53,7 +65,7 @@ void MQTT_Client::loop() {
         lastMsgTime = now;
 
 
-        int distance = sonar->getDistance();
+        int distance = sonar->getDistance()*100;
     Serial.println(String("Distance: ") + distance);
 
     // Creating a message in the buffer
@@ -94,6 +106,7 @@ void MQTT_Client::setup_wifi() {
     Serial.println(String("Connecting to ") + ssid);
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
+    redLed->switchOn();
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
@@ -102,15 +115,22 @@ void MQTT_Client::setup_wifi() {
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+    greenLed->switchOn();
+    redLed->switchOff();
 }
 
 void MQTT_Client::callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(String("Message arrived on [") + topic + "] len: " + length);
+    greenLed->switchOn();
 }
 
 void MQTT_Client::reconnect() {
     // Loop until we're reconnected
+    
     while (!client.connected()) {
+
+        
+
         Serial.print("Attempting MQTT connection...");
         // Create a random client ID
         String clientId = String("esiot-2122-client-") + String(random(0xffff), HEX);
@@ -123,12 +143,23 @@ void MQTT_Client::reconnect() {
             // ... and resubscribe
             client.subscribe(topic);
 
+
+            greenLed->switchOn();
+            
+            greenLed->switchOff();
+            
+
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
             Serial.println(" try again in 5 seconds");
             // Wait 5 seconds before retrying
             delay(5000);
+
+
+            redLed->switchOn();
+            redLed->switchOff();
+
         }
     }
 }
